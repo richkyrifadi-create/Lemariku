@@ -40,10 +40,12 @@ function render_header(string $title): void
       <a<?= nav_attrs('index.php') ?> href="index.php">Lemari</a>
       <a<?= nav_attrs('item_form.php') ?> href="item_form.php">+ Pakaian</a>
       <a<?= nav_attrs('outfits.php') ?> href="outfits.php">Outfit</a>
+      <a<?= nav_attrs('masukan.php') ?> href="masukan.php">Masukan</a>
       <a href="logout.php">Keluar</a>
     <?php else: ?>
       <a<?= nav_attrs('login.php') ?> href="login.php">Masuk</a>
       <a<?= nav_attrs('register.php') ?> href="register.php">Daftar</a>
+      <a<?= nav_attrs('masukan.php') ?> href="masukan.php">Masukan</a>
     <?php endif; ?>
   </nav>
 </header>
@@ -56,7 +58,14 @@ function render_header(string $title): void
 
 function render_footer(): void
 {
-    echo "</main>\n</body>\n</html>\n";
+    ?>
+</main>
+<footer class="sitefoot">
+  <p>Dibuat oleh <a href="<?= e(AUTHOR_URL) ?>" target="_blank" rel="noopener noreferrer"><?= e(AUTHOR_NAME) ?></a></p>
+</footer>
+</body>
+</html>
+    <?php
 }
 
 /**

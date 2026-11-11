@@ -56,6 +56,21 @@ button.danger { background: transparent; color: var(--danger); border: 1px solid
 .panel h1, .panel h2 { text-align: center; margin-bottom: 18px; }
 .form-actions { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 18px; }
 .page-title { text-align: center; margin-bottom: 18px; }
+.center { text-align: center; }
+
+/* Form masukan: label dan input berdampingan sebagai elemen terpisah,
+   bukan input di dalam label seperti form lain. */
+.feedback label { margin-bottom: 4px; font-weight: 500; }
+.feedback input, .feedback select, .feedback textarea { margin-bottom: 14px; }
+.feedback textarea { resize: vertical; min-height: 120px; }
+.feedback .row > div { display: flex; flex-direction: column; }
+.counter { margin: -8px 0 16px; font-size: 0.85rem; color: var(--muted); text-align: right; }
+.count-short { color: var(--danger); font-weight: 600; }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+.sitefoot { border-top: 1px solid var(--border); margin-top: 40px; padding: 18px 20px 28px; text-align: center; color: var(--muted); font-size: 0.9rem; }
+.sitefoot p { margin: 0; }
+.sitefoot a { color: var(--accent); font-weight: 600; }
 .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 @media (max-width: 560px) { .row { grid-template-columns: 1fr; } }
 .preview { max-width: 200px; border-radius: 8px; margin-bottom: 12px; }

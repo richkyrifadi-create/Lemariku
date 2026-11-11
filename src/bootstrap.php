@@ -14,6 +14,19 @@ define('SEASONS', ['Semua musim', 'Kemarau', 'Penghujan']);
 // Urutan tampil section di halaman lemari. Kategori di luar daftar ini tampil paling bawah.
 define('CATEGORY_ORDER', ['Atasan', 'Bawahan', 'Dress', 'Outerwear', 'Sepatu', 'Aksesoris']);
 
+// Kredit di footer. Ganti AUTHOR_URL kalau mau menunjuk ke portofolio atau LinkedIn.
+define('AUTHOR_NAME', 'Richky');
+define('AUTHOR_URL', 'https://github.com/richkyrifadi-create');
+
+// Form masukan dan pengaduan
+define('FEEDBACK_CATEGORIES', ['Masukan', 'Pengaduan Fasilitas', 'Bug/Error', 'Lainnya']);
+define('FEEDBACK_SUBJECT_MAX', 100);
+define('FEEDBACK_MESSAGE_MIN', 20);
+define('FEEDBACK_MESSAGE_MAX', 1000);
+define('FEEDBACK_IMAGE_MAX_BYTES', 2 * 1024 * 1024);
+define('FEEDBACK_RATE_LIMIT', 3);
+define('FEEDBACK_RATE_WINDOW_MINUTES', 10);
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -147,11 +160,14 @@ function upload_limit_bytes(): int
 /**
  * Simpan foto yang diupload. Mengembalikan [namaFile|null, pesanError|null].
  */
-function save_upload(array $file): array
+function save_upload(array $file, ?int $maxBytes = null, ?array $allowedMime = null): array
 {
+    $allowedMime ??= ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/webp' => 'webp'];
+    $maxBytes ??= UPLOAD_MAX_BYTES;
+
     // Batas efektif: yang terkecil antara batas aplikasi dan batas php.ini.
     $iniLimit = upload_limit_bytes();
-    $limit = min(UPLOAD_MAX_BYTES, $iniLimit ?: UPLOAD_MAX_BYTES);
+    $limit = min($maxBytes, $iniLimit ?: $maxBytes);
     $limitMb = round($limit / 1048576, 1);
 
     if ($file['error'] === UPLOAD_ERR_INI_SIZE || $file['error'] === UPLOAD_ERR_FORM_SIZE) {
@@ -169,10 +185,14 @@ function save_upload(array $file): array
     if ($file['size'] > $limit) {
         return [null, "Ukuran foto maksimal {$limitMb} MB."];
     }
+    // Tipe diperiksa dari isi file, bukan dari nama atau header kiriman browser.
     $mime = (new finfo(FILEINFO_MIME_TYPE))->file($file['tmp_name']);
-    $ext = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/webp' => 'webp'][$mime] ?? null;
+    $ext = $allowedMime[$mime] ?? null;
     if ($ext === null) {
-        return [null, 'Format foto harus JPG, PNG, atau WEBP.'];
+        $names = array_values(array_unique(array_map('strtoupper', array_values($allowedMime))));
+        $last = array_pop($names);
+        $list = $names ? implode(', ', $names) . ' atau ' . $last : $last;
+        return [null, "Format foto harus $list."];
     }
     if (!is_dir(UPLOAD_DIR)) {
         mkdir(UPLOAD_DIR, 0755, true);
@@ -190,4 +210,26 @@ function delete_image(?string $name): void
     if ($name !== null && preg_match('/^[a-f0-9]{32}\.(jpg|png|webp)$/', $name)) {
         @unlink(UPLOAD_DIR . '/' . $name);
     }
+}
+
+function client_ip(): string
+{
+    // Sengaja tidak memakai X-Forwarded-For: header itu gampang dipalsukan,
+    // jadi tidak layak dipakai sebagai dasar pembatasan.
+    return (string) ($_SERVER['REMOTE_ADDR'] ?? '');
+}
+
+/**
+ * Batasi pengiriman masukan: maksimal FEEDBACK_RATE_LIMIT kali
+ * dalam FEEDBACK_RATE_WINDOW_MINUTES menit per alamat IP.
+ */
+function feedback_rate_exceeded(PDO $pdo, string $ip): bool
+{
+    if ($ip === '') {
+        return false;
+    }
+    $cutoff = date('Y-m-d H:i:s', time() - FEEDBACK_RATE_WINDOW_MINUTES * 60);
+    $stmt = $pdo->prepare('SELECT COUNT(*) FROM feedback WHERE ip = ? AND created_at >= ?');
+    $stmt->execute([$ip, $cutoff]);
+    return (int) $stmt->fetchColumn() >= FEEDBACK_RATE_LIMIT;
 }
