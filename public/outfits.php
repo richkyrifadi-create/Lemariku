@@ -77,7 +77,7 @@ $outfits = $stmt->fetchAll();
 
 render_header('Outfit');
 ?>
-<h1>Outfit</h1>
+<h1 class="page-title">Outfit</h1>
 
 <?php if (!$outfits): ?>
   <p class="muted">Belum ada outfit yang disimpan.</p>
@@ -99,11 +99,11 @@ render_header('Outfit');
   <?php endforeach; ?>
 </div>
 
-<h2>Buat outfit baru</h2>
 <?php if (!$myItems): ?>
   <p class="muted">Tambahkan pakaian dulu di <a href="item_form.php">halaman tambah pakaian</a>.</p>
 <?php else: ?>
 <form class="panel" method="post">
+  <h2>Buat outfit baru</h2>
   <?php foreach ($errors as $err): ?><p class="error"><?= e($err) ?></p><?php endforeach; ?>
   <input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>">
   <input type="hidden" name="action" value="create">
@@ -119,7 +119,9 @@ render_header('Outfit');
     <?php endforeach; ?>
   </fieldset>
   <label>Catatan (opsional) <textarea name="notes" rows="2" maxlength="500"><?= e($notes) ?></textarea></label>
-  <button type="submit">Simpan outfit</button>
+  <div class="form-actions">
+    <button type="submit">Simpan outfit</button>
+  </div>
 </form>
 <?php endif; ?>
 <?php render_footer();

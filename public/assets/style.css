@@ -48,8 +48,11 @@ button { padding: 8px 14px; border: none; border-radius: 8px; background: var(--
 button.ghost { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
 button.danger { background: transparent; color: var(--danger); border: 1px solid var(--danger); }
 .ghost-link { margin-left: 10px; }
-.panel { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; max-width: 640px; }
+.panel { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; max-width: 640px; margin: 0 auto 24px; }
 .panel.narrow { max-width: 420px; margin: 40px auto; }
+.panel h1, .panel h2 { text-align: center; margin-bottom: 18px; }
+.form-actions { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 18px; }
+.page-title { text-align: center; margin-bottom: 18px; }
 .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 @media (max-width: 560px) { .row { grid-template-columns: 1fr; } }
 .preview { max-width: 200px; border-radius: 8px; margin-bottom: 12px; }

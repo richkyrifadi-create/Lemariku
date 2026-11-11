@@ -59,7 +59,9 @@ function render_item_card(array $it): void
       <h3><?= e($it['name']) ?></h3>
       <p class="muted"><?= $it['brand'] ? e($it['brand']) : '' ?><?= $it['brand'] && $it['color'] ? ' · ' : '' ?><?= $it['color'] ? e($it['color']) : '' ?></p>
       <p>Dipakai <strong><?= (int) $it['wear_count'] ?>x</strong><?= $it['last_worn'] ? ' · terakhir ' . e($it['last_worn']) : '' ?></p>
-      <p class="muted">Harga <?= e(rupiah($it['price_f'])) ?> · per pakai <?= e(rupiah($it['cpw'])) ?></p>
+      <?php if ($it['price_f'] !== null): ?>
+        <p class="muted">Harga <?= e(rupiah($it['price_f'])) ?> · per pakai <?= e(rupiah($it['cpw'])) ?></p>
+      <?php endif; ?>
 
       <?php if ($it['unused']): ?><span class="badge">Jarang dipakai</span><?php endif; ?>
       <?php if ($it['is_laundry']): ?><span class="badge badge-wash">Perlu dicuci</span><?php endif; ?>

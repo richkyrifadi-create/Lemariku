@@ -63,7 +63,9 @@ render_header('Lemari');
   <div><strong><?= count($items) ?></strong><span>item</span></div>
   <div><strong><?= $laundryCount ?></strong><span>perlu dicuci</span></div>
   <div><strong><?= $unusedCount ?></strong><span>jarang dipakai (<?= UNUSED_DAYS ?> hari)</span></div>
-  <div><strong><?= e(rupiah($totalValue)) ?></strong><span>total nilai</span></div>
+  <?php if ($totalValue > 0): ?>
+    <div><strong><?= e(rupiah($totalValue)) ?></strong><span>total nilai</span></div>
+  <?php endif; ?>
 </section>
 
 <form class="filters" method="get">

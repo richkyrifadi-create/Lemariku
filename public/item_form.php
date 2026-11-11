@@ -11,7 +11,7 @@ $categoryIds = array_map(fn($c) => (int) $c['id'], $categories);
 $id = (int) ($_GET['id'] ?? $_POST['id'] ?? 0);
 $item = [
     'id' => 0, 'name' => '', 'brand' => '', 'color' => '', 'season' => SEASONS[0],
-    'price' => '', 'purchased_at' => '', 'category_id' => 0, 'image' => null,
+    'category_id' => 0, 'image' => null,
 ];
 
 if ($id > 0) {
@@ -23,7 +23,6 @@ if ($id > 0) {
         exit('Pakaian tidak ditemukan.');
     }
     $item = $found;
-    $item['price'] = $item['price'] !== null ? (string) (float) $item['price'] : '';
 }
 
 $errors = [];
@@ -35,8 +34,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $item['brand'] = trim((string) ($_POST['brand'] ?? ''));
     $item['color'] = trim((string) ($_POST['color'] ?? ''));
     $item['season'] = (string) ($_POST['season'] ?? '');
-    $item['price'] = trim((string) ($_POST['price'] ?? ''));
-    $item['purchased_at'] = trim((string) ($_POST['purchased_at'] ?? ''));
     $item['category_id'] = (int) ($_POST['category_id'] ?? 0);
 
     $name = $item['name'];
@@ -50,25 +47,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = 'Pilih musim yang valid.';
     }
 
-    $price = null;
-    if ($item['price'] !== '') {
-        if (!is_numeric($item['price']) || (float) $item['price'] < 0) {
-            $errors[] = 'Harga harus angka dan tidak negatif.';
-        } else {
-            $price = round((float) $item['price'], 2);
-        }
-    }
-
-    $purchasedAt = null;
-    if ($item['purchased_at'] !== '') {
-        $date = DateTime::createFromFormat('Y-m-d', $item['purchased_at']);
-        if (!$date || $date->format('Y-m-d') !== $item['purchased_at']) {
-            $errors[] = 'Format tanggal beli tidak valid.';
-        } else {
-            $purchasedAt = $item['purchased_at'];
-        }
-    }
-
     $newImage = null;
     if (isset($_FILES['image']) && $_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE) {
         [$newImage, $uploadError] = save_upload($_FILES['image']);
@@ -80,13 +58,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$errors) {
         if ($id > 0) {
             $image = $newImage ?? $item['image'];
+            // price dan purchased_at sengaja tidak disentuh, supaya data lama tetap utuh.
             $pdo->prepare(
-                'UPDATE items SET name = ?, brand = ?, color = ?, season = ?, price = ?,
-                                  purchased_at = ?, category_id = ?, image = ?
+                'UPDATE items SET name = ?, brand = ?, color = ?, season = ?, category_id = ?, image = ?
                  WHERE id = ? AND user_id = ?'
             )->execute([
-                $name, $item['brand'] ?: null, $item['color'] ?: null, $item['season'], $price,
-                $purchasedAt, $item['category_id'], $image, $id, $userId,
+                $name, $item['brand'] ?: null, $item['color'] ?: null, $item['season'],
+                $item['category_id'], $image, $id, $userId,
             ]);
             if ($newImage !== null && $item['image'] !== null) {
                 delete_image($item['image']);
@@ -94,11 +72,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             flash_set('Pakaian diperbarui.');
         } else {
             $pdo->prepare(
-                'INSERT INTO items (user_id, name, brand, color, season, price, purchased_at, category_id, image)
-                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+                'INSERT INTO items (user_id, name, brand, color, season, category_id, image)
+                 VALUES (?, ?, ?, ?, ?, ?, ?)'
             )->execute([
-                $userId, $name, $item['brand'] ?: null, $item['color'] ?: null, $item['season'],
-                $price, $purchasedAt, $item['category_id'], $newImage,
+                $userId, $name, $item['brand'] ?: null, $item['color'] ?: null,
+                $item['season'], $item['category_id'], $newImage,
             ]);
             flash_set('Pakaian ditambahkan.');
         }
@@ -142,12 +120,7 @@ render_header($id > 0 ? 'Edit pakaian' : 'Tambah pakaian');
     <label>Warna <input type="text" name="color" value="<?= e($item['color']) ?>" maxlength="40"></label>
   </div>
 
-  <div class="row">
-    <label>Harga (Rp) <input type="number" name="price" min="0" step="any" inputmode="decimal" value="<?= e($item['price']) ?>"></label>
-    <label>Tanggal beli <input type="date" name="purchased_at" value="<?= e($item['purchased_at']) ?>"></label>
-  </div>
-
-  <label>Foto (JPG, PNG, atau WEBP, maks 3 MB)
+  <label>Foto (JPG, PNG, atau WEBP)
     <input type="file" name="image" accept="image/jpeg,image/png,image/webp">
   </label>
   <?php if ($item['image']): ?>
@@ -155,7 +128,9 @@ render_header($id > 0 ? 'Edit pakaian' : 'Tambah pakaian');
     <img class="preview" src="uploads/<?= e($item['image']) ?>" alt="">
   <?php endif; ?>
 
-  <button type="submit">Simpan</button>
-  <a class="ghost-link" href="index.php">Batal</a>
+  <div class="form-actions">
+    <button type="submit">Simpan</button>
+    <a class="ghost-link" href="index.php">Batal</a>
+  </div>
 </form>
 <?php render_footer();
