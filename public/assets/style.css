@@ -13,7 +13,8 @@ a { color: var(--accent); }
 h1, h2, h3 { margin: 0.4em 0; }
 .topbar { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; background: var(--card); border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 8px; }
 .brand { font-weight: 700; font-size: 1.2rem; color: var(--ink); text-decoration: none; }
-.topbar nav a { margin-left: 14px; text-decoration: none; }
+.topbar nav a { margin-left: 14px; text-decoration: none; padding-bottom: 4px; border-bottom: 2px solid transparent; }
+.topbar nav a.active { font-weight: 700; color: var(--accent); border-bottom-color: var(--accent); }
 .container { max-width: 1040px; margin: 0 auto; padding: 20px; }
 .flash { background: #eef5ea; border: 1px solid #c9dfbf; padding: 10px 14px; border-radius: 8px; margin-bottom: 16px; }
 .error { color: var(--danger); background: #fbeeee; padding: 8px 12px; border-radius: 6px; }

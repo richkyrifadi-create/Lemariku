@@ -1,6 +1,24 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * Tandai menu yang sedang dibuka. Halaman edit pakaian dihitung
+ * sebagai bagian dari "Lemari", bukan "+ Pakaian".
+ */
+function nav_attrs(string $page): string
+{
+    $current = basename((string) ($_SERVER['SCRIPT_NAME'] ?? ''));
+    $editing = $current === 'item_form.php' && (int) ($_GET['id'] ?? $_POST['id'] ?? 0) > 0;
+
+    $active = match ($page) {
+        'index.php' => $current === 'index.php' || $editing,
+        'item_form.php' => $current === 'item_form.php' && !$editing,
+        default => $current === $page,
+    };
+
+    return $active ? ' class="active" aria-current="page"' : '';
+}
+
 function render_header(string $title): void
 {
     $loggedIn = current_user_id() !== null;
@@ -19,13 +37,13 @@ function render_header(string $title): void
   <a class="brand" href="index.php">Lemariku</a>
   <nav>
     <?php if ($loggedIn): ?>
-      <a href="index.php">Lemari</a>
-      <a href="item_form.php">+ Pakaian</a>
-      <a href="outfits.php">Outfit</a>
+      <a<?= nav_attrs('index.php') ?> href="index.php">Lemari</a>
+      <a<?= nav_attrs('item_form.php') ?> href="item_form.php">+ Pakaian</a>
+      <a<?= nav_attrs('outfits.php') ?> href="outfits.php">Outfit</a>
       <a href="logout.php">Keluar</a>
     <?php else: ?>
-      <a href="login.php">Masuk</a>
-      <a href="register.php">Daftar</a>
+      <a<?= nav_attrs('login.php') ?> href="login.php">Masuk</a>
+      <a<?= nav_attrs('register.php') ?> href="register.php">Daftar</a>
     <?php endif; ?>
   </nav>
 </header>
