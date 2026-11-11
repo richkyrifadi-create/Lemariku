@@ -34,7 +34,6 @@ $stmt->execute($params);
 $items = $stmt->fetchAll();
 
 $cutoff = date('Y-m-d', strtotime('-' . UNUSED_DAYS . ' days'));
-$totalValue = 0.0;
 $unusedCount = 0;
 $laundryCount = 0;
 foreach ($items as &$it) {
@@ -51,7 +50,6 @@ foreach ($items as &$it) {
     if ($it['is_laundry']) {
         $laundryCount++;
     }
-    $totalValue += $price ?? 0.0;
 }
 unset($it);
 
@@ -63,9 +61,6 @@ render_header('Lemari');
   <div><strong><?= count($items) ?></strong><span>item</span></div>
   <div><strong><?= $laundryCount ?></strong><span>perlu dicuci</span></div>
   <div><strong><?= $unusedCount ?></strong><span>jarang dipakai (<?= UNUSED_DAYS ?> hari)</span></div>
-  <?php if ($totalValue > 0): ?>
-    <div><strong><?= e(rupiah($totalValue)) ?></strong><span>total nilai</span></div>
-  <?php endif; ?>
 </section>
 
 <form class="filters" method="get">
