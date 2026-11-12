@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 render_header('Masukan');
 ?>
-<form class="panel feedback" method="post" enctype="multipart/form-data">
+<form class="panel feedback rv" method="post" enctype="multipart/form-data">
   <h1>Masukan &amp; Pengaduan</h1>
   <p class="muted center">Ada saran, menemukan error, atau ada yang tidak berfungsi? Tulis di sini.</p>
 

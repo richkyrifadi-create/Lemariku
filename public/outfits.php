@@ -77,7 +77,8 @@ $outfits = $stmt->fetchAll();
 
 render_header('Outfit');
 ?>
-<h1 class="page-title">Outfit</h1>
+<p class="eyebrow rv">Kombinasi</p>
+<h1 class="page-title rv">Outfit simpanan.</h1>
 
 <?php if (!$outfits): ?>
   <p class="muted">Belum ada outfit yang disimpan.</p>
@@ -85,16 +86,20 @@ render_header('Outfit');
 
 <div class="grid">
   <?php foreach ($outfits as $o): ?>
-    <article class="card">
-      <h3><?= e($o['name']) ?></h3>
-      <p class="muted"><?= e($o['item_names'] ?? '') ?></p>
-      <?php if ($o['notes']): ?><p><?= nl2br(e($o['notes'])) ?></p><?php endif; ?>
-      <form method="post" onsubmit="return confirm('Hapus outfit ini?')">
-        <input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>">
-        <input type="hidden" name="action" value="delete">
-        <input type="hidden" name="outfit_id" value="<?= (int) $o['id'] ?>">
-        <button type="submit" class="danger">Hapus</button>
-      </form>
+    <article class="card card-plain rv">
+      <div class="card-body">
+        <h3><?= e($o['name']) ?></h3>
+        <p><?= e($o['item_names'] ?? '') ?></p>
+        <?php if ($o['notes']): ?><p><?= nl2br(e($o['notes'])) ?></p><?php endif; ?>
+        <div class="actions">
+          <form method="post" onsubmit="return confirm('Hapus outfit ini?')">
+            <input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>">
+            <input type="hidden" name="action" value="delete">
+            <input type="hidden" name="outfit_id" value="<?= (int) $o['id'] ?>">
+            <button type="submit" class="link danger">Hapus</button>
+          </form>
+        </div>
+      </div>
     </article>
   <?php endforeach; ?>
 </div>
@@ -102,7 +107,7 @@ render_header('Outfit');
 <?php if (!$myItems): ?>
   <p class="muted">Tambahkan pakaian dulu di <a href="item_form.php">halaman tambah pakaian</a>.</p>
 <?php else: ?>
-<form class="panel" method="post">
+<form class="panel rv" method="post">
   <h2>Buat outfit baru</h2>
   <?php foreach ($errors as $err): ?><p class="error"><?= e($err) ?></p><?php endforeach; ?>
   <input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>">

@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 render_header($id > 0 ? 'Edit pakaian' : 'Tambah pakaian');
 ?>
-<form class="panel" method="post" enctype="multipart/form-data">
+<form class="panel rv" method="post" enctype="multipart/form-data">
   <h1><?= $id > 0 ? 'Edit pakaian' : 'Tambah pakaian' ?></h1>
   <?php foreach ($errors as $err): ?><p class="error"><?= e($err) ?></p><?php endforeach; ?>
 

@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 render_header('Masuk');
 ?>
-<form class="panel narrow" method="post">
+<form class="panel narrow rv" method="post">
   <h1>Masuk</h1>
   <?php if ($error): ?><p class="error"><?= e($error) ?></p><?php endif; ?>
   <input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>">

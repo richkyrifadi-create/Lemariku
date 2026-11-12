@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 render_header('Daftar');
 ?>
-<form class="panel narrow" method="post">
+<form class="panel narrow rv" method="post">
   <h1>Daftar</h1>
   <?php foreach ($errors as $err): ?><p class="error"><?= e($err) ?></p><?php endforeach; ?>
   <input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>">

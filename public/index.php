@@ -57,13 +57,16 @@ $sections = group_by_category($items);
 
 render_header('Lemari');
 ?>
-<section class="stats">
+<p class="eyebrow rv">Lemari</p>
+<h1 class="page-title rv">Isi lemarimu.</h1>
+
+<section class="stats rv">
   <div><strong><?= count($items) ?></strong><span>item</span></div>
   <div><strong><?= $laundryCount ?></strong><span>perlu dicuci</span></div>
   <div><strong><?= $unusedCount ?></strong><span>jarang dipakai (<?= UNUSED_DAYS ?> hari)</span></div>
 </section>
 
-<form class="filters" method="get">
+<form class="filters rv" method="get">
   <input type="search" name="q" value="<?= e($q) ?>" placeholder="Cari nama, merek, atau warna">
   <select name="category">
     <option value="0">Semua kategori</option>
@@ -88,7 +91,7 @@ render_header('Lemari');
 <?php endif; ?>
 
 <?php if (count($sections) > 1): ?>
-  <nav class="section-nav">
+  <nav class="section-nav rv">
     <?php foreach ($sections as $catName => $catItems): ?>
       <a href="#kategori-<?= e(slug($catName)) ?>"><?= e($catName) ?> <span><?= count($catItems) ?></span></a>
     <?php endforeach; ?>
@@ -97,7 +100,7 @@ render_header('Lemari');
 
 <?php foreach ($sections as $catName => $catItems): ?>
   <section class="wardrobe-section" id="kategori-<?= e(slug($catName)) ?>">
-    <div class="section-head">
+    <div class="section-head rv">
       <h2><?= e($catName) ?></h2>
       <span class="count"><?= count($catItems) ?> item</span>
     </div>
