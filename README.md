@@ -1,6 +1,6 @@
 # Lemariku
 
-Aplikasi lemari digital pribadi: catat pakaian, lihat berapa kali dipakai, hitung *cost per wear*, dan simpan kombinasi outfit.
+Aplikasi lemari digital pribadi: catat pakaian, tandai pemakaian harian, dan lihat riwayatnya per tanggal.
 
 Dibangun dengan PHP native (PDO) dan MySQL, tanpa framework.
 
@@ -39,6 +39,7 @@ php -S localhost:8000 -t public
 ```
 lemariku/
 ├── schema.sql              # Definisi database dan data kategori awal
+├── migrations/             # Perubahan skema untuk database yang sudah jalan
 ├── src/
 │   ├── bootstrap.php       # Koneksi DB, CSRF, login, upload foto, helper
 │   └── layout.php          # Header dan footer HTML
@@ -48,9 +49,12 @@ lemariku/
     ├── item_delete.php     # Hapus pakaian
     ├── wear.php            # Catat dipakai / tandai dicuci
     ├── riwayat.php         # Riwayat pemakaian per tanggal
+    ├── masukan.php         # Form masukan dan pengaduan
     ├── login.php, register.php, logout.php
     ├── uploads/            # Foto pakaian (PHP dinonaktifkan lewat .htaccess)
-    └── assets/style.css
+    └── assets/
+        ├── style.css       # Tema editorial monokrom
+        └── app.js          # Reveal halus saat scroll
 ```
 
 ## Skema database
