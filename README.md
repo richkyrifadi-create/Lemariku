@@ -13,7 +13,7 @@ Dibangun dengan PHP native (PDO) dan MySQL, tanpa framework.
 - Lemari terbagi per kategori, tiap kategori punya section dan jumlah itemnya sendiri
 - Statistik: jumlah item, perlu dicuci, jumlah yang jarang dipakai (90 hari), total nilai, dan cost per wear
 - Pencarian dan filter kategori
-- Outfit: gabungkan beberapa pakaian menjadi satu kombinasi
+- Riwayat pemakaian dikelompokkan per tanggal, terisi otomatis dari "Pakai hari ini", dan tiap catatan bisa dihapus kalau salah pencet
 
 ## Menjalankan dengan XAMPP
 
@@ -47,7 +47,7 @@ lemariku/
     ├── item_form.php       # Tambah dan edit pakaian
     ├── item_delete.php     # Hapus pakaian
     ├── wear.php            # Catat dipakai / tandai dicuci
-    ├── outfits.php         # Buat dan hapus outfit
+    ├── riwayat.php         # Riwayat pemakaian per tanggal
     ├── login.php, register.php, logout.php
     ├── uploads/            # Foto pakaian (PHP dinonaktifkan lewat .htaccess)
     └── assets/style.css
@@ -58,11 +58,9 @@ lemariku/
 ```
 users 1───* items *───1 categories
   │          │
-  │          ├───* wear_logs      (item_id, worn_on) unik per hari
-  │          │
-  │          └───* outfit_items *───1 outfits
-  │                                    │
-  └────────────────────────────────────┘ (user_id)
+  │          └───* wear_logs      (item_id, worn_on) unik per hari
+  │
+  └───* feedback  (tabel berdiri sendiri, tidak terikat user)
 ```
 
 ## Keamanan yang sudah diterapkan
@@ -76,6 +74,5 @@ users 1───* items *───1 categories
 
 ## Rencana berikutnya
 
-- Lihat outfit dengan foto pakaian sebagai thumbnail
 - Statistik per kategori dan grafik pemakaian
 - Tes otomatis untuk fungsi perhitungan cost per wear

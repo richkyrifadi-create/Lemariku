@@ -43,15 +43,6 @@ CREATE TABLE IF NOT EXISTS wear_logs (
   CONSTRAINT fk_wear_item FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE IF NOT EXISTS outfits (
-  id         INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  user_id    INT UNSIGNED NOT NULL,
-  name       VARCHAR(100) NOT NULL,
-  notes      TEXT NULL,
-  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_outfits_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-) ENGINE=InnoDB;
-
 CREATE TABLE IF NOT EXISTS feedback (
   id         INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   category   VARCHAR(40) NOT NULL,
@@ -63,12 +54,4 @@ CREATE TABLE IF NOT EXISTS feedback (
   ip         VARCHAR(45) NULL,
   created_at DATETIME NOT NULL,
   INDEX idx_feedback_ip_time (ip, created_at)
-) ENGINE=InnoDB;
-
-CREATE TABLE IF NOT EXISTS outfit_items (
-  outfit_id INT UNSIGNED NOT NULL,
-  item_id   INT UNSIGNED NOT NULL,
-  PRIMARY KEY (outfit_id, item_id),
-  CONSTRAINT fk_oi_outfit FOREIGN KEY (outfit_id) REFERENCES outfits(id) ON DELETE CASCADE,
-  CONSTRAINT fk_oi_item FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;

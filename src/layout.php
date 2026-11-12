@@ -43,7 +43,7 @@ function render_header(string $title): void
     <?php if ($loggedIn): ?>
       <a<?= nav_attrs('index.php') ?> href="index.php">Lemari</a>
       <a<?= nav_attrs('item_form.php') ?> href="item_form.php">Tambah</a>
-      <a<?= nav_attrs('outfits.php') ?> href="outfits.php">Outfit</a>
+      <a<?= nav_attrs('riwayat.php') ?> href="riwayat.php">Riwayat</a>
       <a<?= nav_attrs('masukan.php') ?> href="masukan.php">Masukan</a>
       <a href="logout.php">Keluar</a>
     <?php else: ?>

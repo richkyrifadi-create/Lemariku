@@ -105,6 +105,34 @@ function rupiah(?float $amount): string
 }
 
 /**
+ * Tanggal YYYY-MM-DD jadi teks Indonesia, misalnya "Kamis, 12 November 2026".
+ * Tanggal hari ini dan kemarin diberi label khusus supaya lebih cepat dibaca.
+ */
+function format_date_id(string $ymd): string
+{
+    $date = DateTime::createFromFormat('Y-m-d', $ymd);
+    if (!$date || $date->format('Y-m-d') !== $ymd) {
+        return $ymd;
+    }
+
+    if ($ymd === date('Y-m-d')) {
+        return 'Hari ini';
+    }
+    if ($ymd === date('Y-m-d', strtotime('-1 day'))) {
+        return 'Kemarin';
+    }
+
+    $days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+    $months = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+               'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+    return $days[(int) $date->format('w')] . ', '
+        . (int) $date->format('j') . ' '
+        . $months[(int) $date->format('n')] . ' '
+        . $date->format('Y');
+}
+
+/**
  * Ubah teks jadi slug aman untuk dipakai sebagai id anchor HTML.
  */
 function slug(string $text): string

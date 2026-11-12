@@ -269,15 +269,11 @@ h1, h2, h3 { margin: 0; letter-spacing: -.02em; }
 .card-wear button:focus-visible { outline: 2px solid var(--bone); outline-offset: -4px; }
 .card:focus-within .card-wear { opacity: 1; transform: none; }
 
-/* Kartu tanpa foto, dipakai di halaman outfit. */
-.card-plain {
-  flex-basis: 300px;
-  background: var(--card);
-  border: 1px solid var(--line);
-  padding: clamp(18px, 2vw, 24px);
-}
-.card-plain .card-body { padding-top: 0; }
-.card-plain .actions { padding-top: 16px; }
+/* Kartu ringkas untuk halaman Riwayat: foto lebih kecil, info seperlunya. */
+.card-mini { flex-basis: 200px; }
+.card-mini .card-media { aspect-ratio: 1 / 1; }
+.card-mini .card-body { padding-top: 11px; }
+.card-mini .card-body h3 { font-size: 13px; }
 
 /* Jarak antara daftar kartu dan panel form di bawahnya. */
 .grid + .panel, .grid + h2 { margin-top: clamp(32px, 4vw, 56px); }
